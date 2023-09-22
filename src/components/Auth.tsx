@@ -2,6 +2,16 @@ import { useEffect, useRef } from 'react';
 import useWebSocket, { ReadyState } from 'react-use-websocket';
 import { MANAGE_LOCATION } from '../types';
 
+function passDefault() {
+    const items = window.location.toString().split("?pass=", 2);
+    if (items.length === 2) {
+        return items[1];
+    }
+    else {
+        return "";
+    }
+}
+
 export function Auth({ wsTarget, setWsTarget }: { wsTarget: string | null; setWsTarget: (s: string | null) => void; }) {
     const locE = useRef(null as HTMLInputElement | null);
     const pwE = useRef(null as HTMLInputElement | null);
@@ -29,7 +39,7 @@ export function Auth({ wsTarget, setWsTarget }: { wsTarget: string | null; setWs
         }}>
             <label>location: <input ref={locE} name="loc" defaultValue={MANAGE_LOCATION} /></label>
             <br />
-            <label>password: <input ref={pwE} name="pw" type="password" /></label>
+            <label>password: <input ref={pwE} name="pw" type="password" defaultValue={passDefault()} /></label>
             <br />
             <button type="submit" disabled={!(readyState === ReadyState.UNINSTANTIATED || readyState === ReadyState.CLOSED)}>connect</button>
         </form></>;
